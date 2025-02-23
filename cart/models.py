@@ -22,7 +22,26 @@ class Cart(models.Model):
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
+    quantity = models.IntegerField()
     
     def __str__(self):
         return f"{self.quantity} x {self.product.name}"
+
+    def save(self, *args, **kwargs):
+        # TODO: Here must check the quantity to not be more than product stock available
+        if self.pk:
+            old_instance = CartItem.objects.get(pk=self.pk) 
+            self.cart.total_price = self.cart.total_price + (self.quantity - old_instance.quantity) * self.product.price
+            self.cart.save()
+        else:
+            self.cart.total_price = self.cart.total_price + self.quantity * self.product.price
+            self.cart.save()
+        super().save(*args,**kwargs)
+    
+    @property
+    def price(self):
+        return self.product.price
+    
+    @property
+    def total_price(self):
+        return self.product.price * self.quantity
