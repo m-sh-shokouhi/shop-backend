@@ -1,1 +1,1 @@
-# An API base django shop
+# An API based django shop
