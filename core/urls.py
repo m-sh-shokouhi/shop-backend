@@ -33,7 +33,9 @@ router.register(r'cart-items', cart_views.CartItemViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/', include(router.urls))
+    path('api/v1/', include(router.urls)),
+    path('api/v1/auth/', include("accounts.api.v1.urls")),
+
 ]
 
 
