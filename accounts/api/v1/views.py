@@ -1,8 +1,10 @@
 from django.contrib.auth import authenticate, login
-
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from knox.models import AuthToken
+from .serializers import RegistrationSerializer
+
 
 class LoginView(APIView):
 
@@ -18,3 +20,17 @@ class LoginView(APIView):
                  'token' : token
                 })
         return Response({'error': 'Invalid credential'})
+
+
+class RegisterView(APIView):
+    serializer_class = RegistrationSerializer
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {
+                    "message": "User registered successfullty"
+                }, status= status.HTTP_201_CREATED
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
