@@ -17,7 +17,10 @@ class LoginView(APIView):
             login(request, user)
             token = AuthToken.objects.create(user)[1]
             return Response({
-                 'token' : token
+                 'token' : token,
+                 "first_name": user.first_name,
+                 "last_name" : user.last_name,
+                 "email_address" : user.email
                 })
         return Response({'error': 'Invalid credential'})
 
