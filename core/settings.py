@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "corsheaders",
     'products',
     'cart',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
