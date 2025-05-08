@@ -11,7 +11,6 @@ quality_stage:
   stage: test
   script:
     - echo "You are in quality stage"
-
 deploy_stage:
   stage: deploy
   script:
