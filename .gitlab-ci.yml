@@ -1,27 +1,19 @@
 stages:
+  - build
   - test
+  - deploy
 
-variables:
-  # Docker image for the pipeline
-  PYTHON_VERSION: "3.9"
-  DJANGO_SETTINGS_MODULE: "yourproject.settings.production"  # Adjust for your settings structure
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-
-# Test stage
-test:
-  stage: test
-  image: python:$PYTHON_VERSION
-  before_script:
-    - python --version
-    - pip install virtualenv
-    - virtualenv venv
-    - source venv/bin/activate
-    - pip install -r requirements.txt
+build_stage:
+  stage: build
   script:
-    - python manage.py check
-    - python manage.py test
-  only:
-    - merge_requests
-    - master
-    - main
+    - echo "You are in build stage"
+quality_stage:
+  stage: test
+  script:
+    - echo "You are in quality stage"
+
+deploy_stage:
+  stage: deploy
+  script:
+    - echo "You are in deploy stage"
 
