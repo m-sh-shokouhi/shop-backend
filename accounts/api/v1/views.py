@@ -21,10 +21,10 @@ class LoginView(APIView):
             return Response({
                  'token' : token,
                  "user": {
+                    "username" : user.username,
                     "first_name" : user.first_name,
                     "last_name" : user.last_name,
-                    "username" : user.username,
-                    "email_address" : user.email, 
+                    "email" : user.email, 
                     'is_active' : user.is_active,
                     'date_joined' : user.date_joined
                  }
