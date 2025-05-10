@@ -52,3 +52,12 @@ class ProfileView(APIView):
         user = request.user
         serializer = self.serializer_class(user)
         return Response(serializer.data)
+
+
+# TODO
+class AddEmailView(APIView):
+    pass
+
+# TODO
+class ForgotPasswordView(APIView):
+    pass
