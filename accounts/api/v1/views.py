@@ -13,10 +13,12 @@ class LoginView(APIView):
     def post(self,request):
         username = request.data.get("username")
         password = request.data.get("password")
+        if username is None or password is None:
+            return Response({'error': "username or password is not provided"}, status=status.HTTP_400_BAD_REQUEST)
         user = authenticate(username=username,password=password)
 
         if user is not None:
-            login(request, user)
+            # login(request, user)
             token = AuthToken.objects.create(user)[1]
             return Response({
                  'token' : token,
@@ -29,7 +31,7 @@ class LoginView(APIView):
                     'date_joined' : user.date_joined
                  }
                 })
-        return Response({'error': 'Invalid credential'})
+        return Response({'error': 'Invalid credential'},status=status.HTTP_401_UNAUTHORIZED)
 
 
 class RegisterView(APIView):
@@ -40,7 +42,7 @@ class RegisterView(APIView):
             serializer.save()
             return Response(
                 {
-                    "message": "User registered successfullty"
+                    "message": "User registered successfully"
                 }, status= status.HTTP_201_CREATED
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
