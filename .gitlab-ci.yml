@@ -1,18 +1,6 @@
 stages:
-  - build
   - test
-  - deploy
-
-build_stage:
-  stage: build
-  script:
-    - echo "You are in build stage"
-quality_stage:
+test_stage:
   stage: test
   script:
-    - echo "You are in quality stage"
-deploy_stage:
-  stage: deploy
-  script:
-    - echo "You are in deploy stage"
-
+    - ./manage.py test
