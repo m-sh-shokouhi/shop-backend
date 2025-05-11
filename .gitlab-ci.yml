@@ -1,8 +1,14 @@
 stages:
   - test
+  - deploy
 test_stage:
   stage: test
   script:
     - python3 -m venv venv
+    - source venv/bin/activate
     - pip install requirements.txt
     - ./manage.py test
+deploy_stage:
+  stage: deploy
+  script:
+    - echo "The project was deployed"  
