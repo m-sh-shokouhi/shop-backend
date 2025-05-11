@@ -3,4 +3,6 @@ stages:
 test_stage:
   stage: test
   script:
+    - python -m venv venv
+    - pip install requirements.txt
     - ./manage.py test
