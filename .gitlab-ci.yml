@@ -3,6 +3,6 @@ stages:
 test_stage:
   stage: test
   script:
-    - python -m venv venv
+    - python3.10 -m venv venv
     - pip install requirements.txt
     - ./manage.py test
