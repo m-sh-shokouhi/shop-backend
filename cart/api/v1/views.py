@@ -1,26 +1,23 @@
 from rest_framework import viewsets
 from ...models import Cart, CartItem
 from .serializers import CartSerializer, CartItemSerializer
-from .permissions import OrderPermission
+from .permissions import CartViewSetPermission, CartItemPermission
 from rest_framework.response import Response
 from rest_framework import status
 
 class CartViewSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
-    permission_classes = [OrderPermission]
+    permission_classes = [CartViewSetPermission]
     
     def retrieve(self, request, *args, **kwargs):
         if kwargs['pk'] == 'latest':
             user = request.user
-            if user.is_authenticated:
-                queryset = self.queryset.filter(user=user)
-                if queryset.exists():
-                    instance = queryset.latest("created_at")
-                else:
-                    instance = Cart.objects.create(user=user)
+            queryset = self.queryset.filter(user=user)
+            if queryset.exists():
+                instance = queryset.latest("created_at")
             else:
-                return Response({"user": "User must be authenticated."}, status=status.HTTP_400_BAD_REQUEST)
+                instance = Cart.objects.create(user=user)
         else:
             instance = self.get_object()
         serializer = self.get_serializer(instance)
@@ -50,4 +47,12 @@ class CartViewSet(viewsets.ModelViewSet):
 class CartItemViewSet(viewsets.ModelViewSet):
     queryset = CartItem.objects.all()
     serializer_class = CartItemSerializer
-    permission_classes = [OrderPermission]
+    # permission_classes = [CartItemPermission]
+
+    def create(self, request, *args, **kwargs):
+        cart = Cart.objects.get(id=request.data["cart"])
+        exists = cart.items.filter(product__id=request.data["product"]).exists()
+        if exists:
+            return Response({"error": "This product is already available in the cart"},status=status.HTTP_409_CONFLICT)
+        
+        return super().create(request, *args, **kwargs)
