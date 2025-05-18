@@ -48,7 +48,7 @@ class CartItemViewSet(viewsets.ModelViewSet):
     queryset = CartItem.objects.all()
     serializer_class = CartItemSerializer
     # permission_classes = [CartItemPermission]
-
+    # TODO: before creating or updating cart_item you must check the stock
     def create(self, request, *args, **kwargs):
         cart = Cart.objects.get(id=request.data["cart"])
         exists = cart.items.filter(product__id=request.data["product"]).exists()
