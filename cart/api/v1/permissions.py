@@ -10,20 +10,11 @@ class CartViewSetPermission(BasePermission):
 
 class CartItemPermission(BasePermission):
     def has_object_permission(self, request, view, obj):
-        try:
-            cart = Cart.objects.get(pk=request.data['cart'])
-            if request.user.is_staff:
-                return True
-        except Cart.DoesNotExist:
-            return False
-        return cart.user == request.user
+        if request.user.is_staff:
+            return True
+        if obj.cart.user == request.user:
+            return True
+        return False
     
     def has_permission(self, request, view):
-        
-        try:
-            cart = Cart.objects.get(pk=request.data['cart'])
-            if request.user.is_staff:
-                return True
-        except Cart.DoesNotExist:
-            return False
-        return cart.user == request.user
+        return request.user.is_authenticated
