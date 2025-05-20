@@ -10,7 +10,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     permission_classes = [ReadOnlyForUsers]
     lookup_field = "slug"
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = [field.name for field in Product._meta.get_fields()]
+    filterset_fields = [field.name for field in Category._meta.get_fields()]
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
@@ -25,4 +25,4 @@ class ProductImageViewSet(viewsets.ModelViewSet):
     serializer_class = ProductImageSerializer
     permission_classes = [ReadOnlyForUsers]
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = [field.name for field in Product._meta.get_fields()]
+    filterset_fields = [field.name for field in ProductImage._meta.get_fields()]
