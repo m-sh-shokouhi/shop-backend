@@ -56,3 +56,8 @@ class CartItemViewSet(viewsets.ModelViewSet):
             return Response({"error": "This product is already available in the cart"},status=status.HTTP_409_CONFLICT)
         
         return super().create(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        if ~request.user.is_staff:
+            self.queryset = self.queryset.filter(cart__user=request.user)
+        return super().list(request, *args, **kwargs)
