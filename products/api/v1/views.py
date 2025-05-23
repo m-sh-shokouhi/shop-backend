@@ -16,7 +16,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [ReadOnlyForUsers]
-    lookup_field = "slug"
+    # lookup_field = "slug"
     filter_backends = [DjangoFilterBackend]
     filterset_fields = [field.name for field in Product._meta.get_fields()]
 
